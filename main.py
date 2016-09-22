@@ -89,7 +89,7 @@ def load_workouts():
         for n in lines:
             i -= 1
             if i > 0:
-                user_workout.append(n.replace(' ', '').split('-'))
+                user_workout.append(n.strip().split('-'))
 
     if not file_exists:
         i = input('Create default \'workouts.txt\'? (y/n)\n').lower()
@@ -120,7 +120,7 @@ def start_workout(day):
 
         workout_data = ['Session: ' + str(day)]
         for w in user_workout:
-            workout_data.append(w[0] + ' - ' + str(round(float(w[1])*mult)))
+            workout_data.append(w[0] + '- ' + str(round(float(w[1])*mult)))
 
         for w in user_workout:
             i += 1
@@ -143,7 +143,7 @@ def start_workout(day):
             print('')
         day += 1
         write_file(config, 'Day: ' + str(day))
-    write_log('logs/', now, workout_data)
+        write_log('logs/', now, workout_data)
     return;
 
 '''
