@@ -24,6 +24,13 @@ def write(fn, w):
     file = open(fn, 'w')
     file.writelines(lines)
 
+def write_log(path, date, data):
+    file = open(path + 'log-' + date.replace(' ', '-') + '-' + data[0].replace(' ', '-').replace(':', '').lower() + '.txt', 'w')
+    data.insert(0, date+'\n')
+    for i in range(len(data)-1):
+        data[i] += '\n'
+    file.writelines(data)
+
 def get_day(fn):
     file = read_file(fn)
     return int(file[0].replace(' ','').split(':').pop())
@@ -102,7 +109,6 @@ def start_workout(day):
     a = input('Start workout? (y/n)\n')
     if 'y' in a:
 
-        write(record, '\nDAY ' + str(day) + ' --- ' + now)
         clear_window()
 
         base_mult = 1.05
@@ -111,6 +117,10 @@ def start_workout(day):
 
         for i in range(day):
             mult *= base_mult
+
+        workout_data = ['Session: ' + str(day)]
+        for w in user_workout:
+            workout_data.append(w[0] + ' - ' + str(round(float(w[1])*mult)))
 
         for w in user_workout:
             i += 1
@@ -127,12 +137,13 @@ def start_workout(day):
                 workout = ' ' + str(workout)
             print(' ' + w[0] + tabs + str(workout))
             input('---------------------------')
-            write(record, w[0] + ' - ' + str(workout))
+            #write(record, w[0] + ' - ' + str(workout))
             print('-----------DONE------------')
             print('---------------------------')
             print('')
         day += 1
         write_file(config, 'Day: ' + str(day))
+    write_log('logs/', now, workout_data)
     return;
 
 '''
